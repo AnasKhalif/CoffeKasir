@@ -88,19 +88,16 @@ $role = $_SESSION['level'] === 'admin';
                                 <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                                 Data Rekap
                             </a>
+                            <a class="nav-link" href="reservasi.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-ticket"></i></div>
+                                Reservasi
+                            </a>
                         <?php
 
                         else :
 
                         ?>
-                            <a class="nav-link" href="datatransaksi.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-exchange"></i></div>
-                                Data Transaksi
-                            </a>
-                            <a class="nav-link" href="datarekap.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
-                                Data Rekap
-                            </a>
+
                         <?php endif; ?>
                     </div>
                 </div>

@@ -89,6 +89,10 @@ if ((isset($_GET['aksi'])) && (isset($_GET['data']))) {
                                 <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                                 Data Rekap
                             </a>
+                            <a class="nav-link" href="reservasi.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-ticket"></i></div>
+                                Reservasi
+                            </a>
                         <?php
 
                         else :
