@@ -1,6 +1,18 @@
 <?php
 
+require 'function.php';
+
+session_start();
 include("koneksi/koneksi.php");
+if (isset($_GET['data'])) {
+    $id_ruangan = $_GET['data'];
+    $_SESSION["id_ruangan"] = $id_ruangan;
+    $query = mysqli_query($koneksi, "SELECT `nama_ruangan` FROM `ruangan` WHERE `id_ruangan` = '$id_ruangan'");
+    while ($data = mysqli_fetch_array($query)) {
+        $nama_ruangan = $data[0];
+    }
+}
+
 
 ?>
 
@@ -13,7 +25,7 @@ include("koneksi/koneksi.php");
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Data Coffe</title>
+    <title>Edit Menu Coffe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
@@ -26,6 +38,11 @@ include("koneksi/koneksi.php");
         .zoomable:hover {
             transform: scale(2.5);
             transition: 0.3s ease;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
         }
     </style>
 </head>
@@ -53,6 +70,7 @@ include("koneksi/koneksi.php");
             </li>
         </ul>
     </nav>
+
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
@@ -89,15 +107,63 @@ include("koneksi/koneksi.php");
             <main>
                 <div class="container-fluid px-4">
                     <div class="col-sm-6">
-                        <h3><i class="fas fa-ticket mt-3"></i> Reservasi</h3>
+                        <h3><i class="fas fa-ticket mt-3"></i> Reservasi Meja</h3>
                     </div>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Halaman Menu Ruangan Coffe</li>
+                        <li class="breadcrumb-item active">Halaman Reservasi Meja</li>
                     </ol>
+                    <a href="reservasi.php" class="btn btn-sm btn-warning float-right mb-3"><i class="fas fa-arrow-alt-circle-left"></i> Kembali</a>
+
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <i class="fas fa-table mr-1"></i>
+                            Detail ruangan <?php echo $nama_ruangan ?>
+                        </div>
+
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <!-- </br> -->
+                        <!-- <div class="col-sm-10 mx-3 my-0">
+                            <?php if ($_GET['notif'] && $_GET['jenis']) { ?>
+                                <?php if ($_GET['notif'] == "editkosong") { ?>
+                                    <div class="alert alert-danger" role="alert">Maaf data
+                                        <?php echo $_GET['jenis']; ?> wajib di isi</div>
+                                <?php } ?>
+                            <?php } ?>
+                        </div> -->
+                        <form class="form-horizontal" action="konfirmasieditcoffe.php" method="post">
+                            <div class="card-body">
+
+
+                                <div class="form-group row mt-2">
+                                    <label for="namacoffe" class="col-sm-3 col-form-label">Nama Ruangan</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" name="namacoffe" id="namacoffe" value="<?php echo $nama_ruangan ?>" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mt-2">
+                                    <label for="hargacoffe" class="col-sm-3 col-form-label">Sisa Meja Coffe</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" name="hargacoffe" id="hargacoffe" value="10" readonly>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /.card-body -->
+
+                            <!-- /.card-footer -->
+                        </form>
+                    </div>
+                </div>
+            </main>
+            <main>
+                <div class="container-fluid px-4 mt-3">
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Data Ruangan
+                            Data Meja
                         </div>
 
                         <!-- <div class="col-sm-10 mx-3 my-3">
@@ -120,39 +186,46 @@ include("koneksi/koneksi.php");
                             <table id="datatablesSimple">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">Ruang Coffe</th>
-                                        <th class="text-center">Sisa Meja</th>
-                                        <th class="text-center">Meja Terpenuhi</th>
+                                        <th class="text-center">No</th>
+                                        <th class="text-center">Nama Ruangan</th>
+                                        <th class="text-center">No Meja</th>
+                                        <th class="text-center">Nama Pemesan</th>
+                                        <th class="text-center">Tanggal</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-
-                                    $sql = "SELECT `id_ruangan`, `nama_ruangan` FROM `ruangan`";
-                                    $query = mysqli_query($koneksi, $sql);
-                                    while ($data = mysqli_fetch_row($query)) {
-                                        $id_ruangan = $data[0];
-                                        $nama_ruangan = $data[1];
-
+                                    $no = 1;
+                                    $query_meja = mysqli_query($koneksi, "SELECT m.*, r.nama_ruangan FROM `meja` m JOIN `ruangan` r ON m.id_ruangan = r.id_ruangan WHERE m.id_ruangan = '$id_ruangan'");
+                                    while ($data = mysqli_fetch_array($query_meja)) {
+                                        $id_meja = $data['id_meja'];
+                                        $nama_ruangan1 = $data['nama_ruangan'];
+                                        $nomor_meja = $data['no_meja'];
+                                        $nama_pemesan = $data['nama_pemesan'];
+                                        $tanggal = $data['tanggal'];
                                     ?>
                                         <tr>
-                                            <td class="text-center"><?php echo  $nama_ruangan ?></td>
-                                            <td class="text-center">10</td>
-                                            <td class="text-center">0</td>
+                                            <td class="text-center"><?php echo $no; ?></td>
+                                            <td class="text-center"><?php echo $nama_ruangan1 ?></td>
+                                            <td class="text-center"><?php echo $nomor_meja ?></td>
+                                            <td class="text-center"><?php echo $nama_pemesan ?></td>
+                                            <td class="text-center"><?php echo $tanggal ?></td>
                                             <td class="text-center">
-                                                <a href="detailruangan.php?data=<?php echo $id_ruangan; ?>" class="btn btn-xs btn-warning"><i class="fas fa-eye"></i> Detail</a>
+                                                <a href="detailruangan.php?data=<?php echo $id_coffe; ?>" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> Hapuss</a>
                                             </td>
                                         </tr>
                                     <?php
+                                        $no++;
                                     }
                                     ?>
                                 </tbody>
                             </table>
                             <!-- Button trigger modal -->
                             <div class="card-tools">
-                                <a href="tambahmenucoffe.php" class="btn btn-sm btn-primary float-right">
-                                    <i class="fas fa-plus"></i> Tambah Menu Coffe</a>
+                                <button type="button" class="btn btn-sm btn-primary float-right" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    Tambah Nomor Meja
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -167,13 +240,46 @@ include("koneksi/koneksi.php");
             </footer>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="js/scripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
     <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>
+
+
+    <!-- Datatables -->
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
     <script src="js/datatables-simple-demo.js"></script>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Meja</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form action="" method="post">
+                    <div class="modal-body">
+                        <select name="id_ruangan" class="form-control">
+                            <option value="<?= $id_ruangan; ?>"><?= $nama_ruangan; ?></option>
+                        </select>
+                        <br>
+                        <input type="text" name="no_meja" class="form-control" placeholder="No Meja" required>
+                        <br>
+                        <input type="text" name="nama_pemesan" class="form-control" placeholder="Nama Pemesan" required>
+                        <br>
+                        <input type="date" name="tanggal" class="form-control" placeholder="Tanggal" required>
+                        <br>
+                        <button type="submit" class="btn btn-primary" name="tambahmeja">Submit</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
