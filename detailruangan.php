@@ -13,6 +13,13 @@ if (isset($_GET['data'])) {
     }
 }
 
+$sql_count = "SELECT COUNT(*) as no_meja FROM `meja` WHERE `id_ruangan` = '$id_ruangan'";
+$count_result = mysqli_query($koneksi, $sql_count);
+$count_data = mysqli_fetch_assoc($count_result);
+
+$existing_tables = $count_data['no_meja'];
+$totalmeja = 10 - $existing_tables;
+
 
 ?>
 
@@ -145,7 +152,7 @@ if (isset($_GET['data'])) {
                                 <div class="form-group row mt-2">
                                     <label for="hargacoffe" class="col-sm-3 col-form-label">Sisa Meja Coffe</label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control" name="hargacoffe" id="hargacoffe" value="10" readonly>
+                                        <input type="text" class="form-control" name="hargacoffe" id="hargacoffe" value="<?php echo $totalmeja ?>" readonly>
                                     </div>
                                 </div>
 

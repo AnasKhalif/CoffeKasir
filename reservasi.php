@@ -129,17 +129,23 @@ include("koneksi/koneksi.php");
                                 <tbody>
                                     <?php
 
-                                    $sql = "SELECT `id_ruangan`, `nama_ruangan` FROM `ruangan`";
+                                    $sql = "SELECT r.id_ruangan, r.nama_ruangan, 
+                                                   (10 - COUNT(m.id_meja)) AS sisa_meja, 
+                                                   COUNT(m.id_meja) AS meja_terpenuhi 
+                                            FROM ruangan r
+                                            LEFT JOIN meja m ON r.id_ruangan = m.id_ruangan
+                                            GROUP BY r.id_ruangan, r.nama_ruangan";
                                     $query = mysqli_query($koneksi, $sql);
-                                    while ($data = mysqli_fetch_row($query)) {
-                                        $id_ruangan = $data[0];
-                                        $nama_ruangan = $data[1];
-
+                                    while ($data = mysqli_fetch_assoc($query)) {
+                                        $id_ruangan = $data['id_ruangan'];
+                                        $nama_ruangan = $data['nama_ruangan'];
+                                        $sisa_meja = $data['sisa_meja'];
+                                        $meja_terpenuhi = $data['meja_terpenuhi'];
                                     ?>
                                         <tr>
                                             <td class="text-center"><?php echo  $nama_ruangan ?></td>
-                                            <td class="text-center">10</td>
-                                            <td class="text-center">0</td>
+                                            <td class="text-center"><?php echo $sisa_meja; ?></td>
+                                            <td class="text-center"><?php echo $meja_terpenuhi; ?></td>
                                             <td class="text-center">
                                                 <a href="detailruangan.php?data=<?php echo $id_ruangan; ?>" class="btn btn-xs btn-warning"><i class="fas fa-eye"></i> Detail</a>
                                             </td>
