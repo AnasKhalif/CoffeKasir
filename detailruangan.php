@@ -127,17 +127,6 @@ $totalmeja = 10 - $existing_tables;
                             Detail ruangan <?php echo $nama_ruangan ?>
                         </div>
 
-                        <!-- /.card-header -->
-                        <!-- form start -->
-                        <!-- </br> -->
-                        <!-- <div class="col-sm-10 mx-3 my-0">
-                            <?php if ($_GET['notif'] && $_GET['jenis']) { ?>
-                                <?php if ($_GET['notif'] == "editkosong") { ?>
-                                    <div class="alert alert-danger" role="alert">Maaf data
-                                        <?php echo $_GET['jenis']; ?> wajib di isi</div>
-                                <?php } ?>
-                            <?php } ?>
-                        </div> -->
                         <form class="form-horizontal" action="konfirmasieditcoffe.php" method="post">
                             <div class="card-body">
 
@@ -173,20 +162,14 @@ $totalmeja = 10 - $existing_tables;
                             Data Meja
                         </div>
 
-                        <!-- <div class="col-sm-10 mx-3 my-3">
+                        <div class="col-sm-10 mx-3 my-3">
                             <?php if (!empty($_GET['notif'])) {
-                                if ($_GET['notif'] == "editberhasil") { ?>
-                                    <div class="alert alert-success" role="alert">
-                                        Data Berhasil Diubah</div>
-                                <?php } else if ($_GET['notif'] == "tambahberhasil") { ?>
+                                if ($_GET['notif'] == "tambahberhasil") { ?>
                                     <div class="alert alert-success" role="alert">
                                         Data Berhasil Ditambah</div>
-                                <?php } else if ($_GET['notif'] == "hapusberhasil") { ?>
-                                    <div class="alert alert-success" role="alert">
-                                        Data Berhasil Dihapus</div>
                                 <?php } ?>
                             <?php } ?>
-                        </div> -->
+                        </div>
 
 
                         <div class="card-body">

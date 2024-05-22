@@ -35,7 +35,7 @@ if (isset($_POST["tambahmeja"])) {
                 VALUES (NULL, '$id_ruangan', '$nomor_meja', '$nama_pemesan', '$tanggal')";
             if (mysqli_query($koneksi, $sql)) {
                 // Redirect to the detail page after successful insertion
-                header("Location: detailruangan.php?data=$id_ruangan");
+                header("Location: detailruangan.php?data=$id_ruangan&notif=tambahberhasil");
                 exit();
             } else {
                 echo "Error: " . $sql . "<br>" . mysqli_error($koneksi);
