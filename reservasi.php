@@ -2,6 +2,12 @@
 
 include("koneksi/koneksi.php");
 
+if (!isset($_SESSION['id_user'])) {
+    // Jika belum, redirect ke halaman login
+    header("Location: login.php");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>

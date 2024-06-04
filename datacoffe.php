@@ -1,6 +1,14 @@
 <?php
 session_start();
 include('koneksi/koneksi.php');
+
+if (!isset($_SESSION['id_user'])) {
+    // Jika belum, redirect ke halaman login
+    header("Location: login.php");
+    exit();
+}
+
+
 $role = $_SESSION['level'] === 'admin';
 if ((isset($_GET['aksi'])) && (isset($_GET['data']))) {
     if ($_GET['aksi'] == 'hapus') {

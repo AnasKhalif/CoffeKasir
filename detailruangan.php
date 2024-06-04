@@ -3,6 +3,11 @@
 require 'function.php';
 
 session_start();
+if (!isset($_SESSION['id_user'])) {
+    // Jika belum, redirect ke halaman login
+    header("Location: login.php");
+    exit();
+}
 include("koneksi/koneksi.php");
 if (isset($_GET['data'])) {
     $id_ruangan = $_GET['data'];
