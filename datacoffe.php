@@ -20,6 +20,11 @@ if ((isset($_GET['aksi'])) && (isset($_GET['data']))) {
     }
 }
 
+$search_query = '';
+if (isset($_POST['search'])) {
+    $search_query = mysqli_real_escape_string($koneksi, $_POST['search']);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -135,7 +140,7 @@ if ((isset($_GET['aksi'])) && (isset($_GET['data']))) {
                             Data Coffe
                         </div>
 
-                        <div class="col-sm-10 mx-3 my-3">
+                        <div class="col-sm-4 mx-3 my-3">
                             <?php if (!empty($_GET['notif'])) {
                                 if ($_GET['notif'] == "editberhasil") { ?>
                                     <div class="alert alert-success" role="alert">
@@ -148,6 +153,15 @@ if ((isset($_GET['aksi'])) && (isset($_GET['data']))) {
                                         Data Berhasil Dihapus</div>
                                 <?php } ?>
                             <?php } ?>
+                        </div>
+
+                        <div class="col-sm-4 mb-2 mx-3">
+                            <form method="post" action="">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search..." name="search">
+                                    <button class="btn btn-primary mx-1" type="submit">Search</button>
+                                </div>
+                            </form>
                         </div>
 
 
@@ -166,6 +180,9 @@ if ((isset($_GET['aksi'])) && (isset($_GET['data']))) {
 
                                     $sql_k = "SELECT `id_coffe`,`nama_coffe`, `harga_coffe` FROM 
                                     `coffe`";
+                                    if ($search_query != '') {
+                                        $sql_k .= " WHERE `nama_coffe` LIKE '%$search_query%'";
+                                    }
                                     $query_k = mysqli_query($koneksi, $sql_k);
                                     $no = 1;
                                     while ($data_k = mysqli_fetch_row($query_k)) {
