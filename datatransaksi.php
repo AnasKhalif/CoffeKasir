@@ -21,6 +21,13 @@ if ((isset($_GET['aksi'])) && (isset($_GET['data']))) {
     }
 }
 
+
+// Handle search query
+$search_query = '';
+if (isset($_POST['search'])) {
+    $search_query = mysqli_real_escape_string($koneksi, $_POST['search']);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -155,6 +162,14 @@ if ((isset($_GET['aksi'])) && (isset($_GET['data']))) {
                             <?php } ?>
                         </div>
 
+                        <div class="col-sm-4 mb-2 mx-3">
+                            <form method="post" action="">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search..." name="search">
+                                    <button class="btn btn-primary mx-1" type="submit">Search</button>
+                                </div>
+                            </form>
+                        </div>
 
                         <div class="card-body">
                             <table id="datatablesSimple">
@@ -175,7 +190,11 @@ if ((isset($_GET['aksi'])) && (isset($_GET['data']))) {
                                 <tbody>
                                     <?php
                                     $no = 1;
-                                    $ambildata = mysqli_query($koneksi, " SELECT * FROM transaksi m, coffe s WHERE s.id_coffe = m.id_coffe");
+                                    $sql = "SELECT * FROM transaksi m, coffe s WHERE s.id_coffe = m.id_coffe";
+                                    if ($search_query != '') {
+                                        $sql .= " AND m.pembeli LIKE '%$search_query%'";
+                                    }
+                                    $ambildata = mysqli_query($koneksi, $sql);
                                     while ($data = mysqli_fetch_array($ambildata)) {
                                         $tanggal = $data['tanggal'];
                                         $nama_coffe = $data['nama_coffe'];
@@ -187,7 +206,6 @@ if ((isset($_GET['aksi'])) && (isset($_GET['data']))) {
                                         $id_transaksi = $data['id_transaksi'];
                                         $total = $data['total'];
                                         $status = $data['status'];
-
                                     ?>
                                         <tr>
                                             <td class="text-center"><?php echo $no; ?></td>
