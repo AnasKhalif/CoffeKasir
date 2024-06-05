@@ -1,1 +1,7 @@
 DirectoryIndex login.php
+
+RewriteEngine On
+AuthType Basic
+AuthName "Password Protected Area"
+AuthUserFile /Applications/XAMPP/xamppfiles/htdocs/pbl2/.htpasswd
+Require valid-user
