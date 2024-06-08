@@ -8,6 +8,7 @@ if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit();
 }
+
 include("koneksi/koneksi.php");
 if (isset($_GET['data'])) {
     $id_ruangan = $_GET['data'];
@@ -17,6 +18,21 @@ if (isset($_GET['data'])) {
         $nama_ruangan = $data[0];
     }
 }
+
+if ((isset($_GET['aksi'])) && (isset($_GET['data'])) && (isset($_GET['id_ruangan']))) {
+    if ($_GET['aksi'] == 'hapus') {
+        $id_meja = $_GET['data'];
+        $id_ruangan = $_GET['id_ruangan'];
+        // Hapus meja berdasarkan ID meja
+        $sql = "DELETE FROM `meja` WHERE `id_meja` = '$id_meja'";
+        mysqli_query($koneksi, $sql);
+
+        // Redirect kembali ke halaman detail ruangan dengan tetap menyertakan ID ruangan
+        header("Location: detailruangan.php?data=$id_ruangan");
+        exit();
+    }
+}
+
 
 $sql_count = "SELECT COUNT(*) as no_meja FROM `meja` WHERE `id_ruangan` = '$id_ruangan'";
 $count_result = mysqli_query($koneksi, $sql_count);
@@ -39,7 +55,6 @@ $totalmeja = 10 - $existing_tables;
     <meta name="author" content="" />
     <title>Edit Menu Coffe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     <style>
@@ -178,7 +193,7 @@ $totalmeja = 10 - $existing_tables;
 
 
                         <div class="card-body">
-                            <table id="datatablesSimple">
+                            <table id="datatablesSimple" class="table table-bordered text-center">
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
@@ -207,8 +222,12 @@ $totalmeja = 10 - $existing_tables;
                                             <td class="text-center"><?php echo $nama_pemesan ?></td>
                                             <td class="text-center"><?php echo $tanggal ?></td>
                                             <td class="text-center">
-                                                <a href="detailruangan.php?data=<?php echo $id_coffe; ?>" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> Hapuss</a>
+                                                <a href="detailruangan.php?aksi=hapus&data=<?php echo $id_meja; ?>&id_ruangan=<?php echo $id_ruangan; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Anda yakin ingin menghapus meja ini?')">
+                                                    <i class="fas fa-trash"></i> Hapus
+                                                </a>
+
                                             </td>
+
                                         </tr>
                                     <?php
                                         $no++;
@@ -242,10 +261,6 @@ $totalmeja = 10 - $existing_tables;
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="assets/demo/chart-area-demo.js"></script>
 
-
-    <!-- Datatables -->
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-    <script src="js/datatables-simple-demo.js"></script>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">

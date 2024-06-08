@@ -21,12 +21,36 @@ if ((isset($_GET['aksi'])) && (isset($_GET['data']))) {
     }
 }
 
+$results_per_page = 5; // Jumlah hasil per halaman
 
-// Handle search query
+if (!isset($_GET['page'])) {
+    $page = 1;
+} else {
+    $page = $_GET['page'];
+}
+
+$start_from = ($page - 1) * $results_per_page;
+
 $search_query = '';
 if (isset($_POST['search'])) {
     $search_query = mysqli_real_escape_string($koneksi, $_POST['search']);
 }
+
+$query = "SELECT * FROM transaksi m, coffe s WHERE s.id_coffe = m.id_coffe";
+$count_query = "SELECT COUNT(*) AS total FROM transaksi";
+
+if ($search_query != '') {
+    $query .= " AND m.pembeli LIKE '%$search_query%'";
+    $count_query .= " WHERE pembeli LIKE '%$search_query%'";
+}
+
+$query .= " ORDER BY id_transaksi DESC LIMIT $start_from, $results_per_page";
+
+$result = mysqli_query($koneksi, $query);
+$total_result = mysqli_query($koneksi, $count_query);
+$total_data = mysqli_fetch_assoc($total_result)['total'];
+$total_pages = ceil($total_data / $results_per_page);
+
 
 ?>
 <!DOCTYPE html>
@@ -40,7 +64,6 @@ if (isset($_POST['search'])) {
     <meta name="author" content="" />
     <title>Data Transaksi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     <style>
@@ -51,6 +74,34 @@ if (isset($_POST['search'])) {
         .zoomable:hover {
             transform: scale(2.5);
             transition: 0.3s ease;
+        }
+
+        .pagination a {
+            color: black;
+            /* Warna teks untuk link pagination */
+            padding: 8px 16px;
+            /* Padding untuk menyesuaikan ukuran link */
+            text-decoration: none;
+            /* Menghapus dekorasi hyperlink */
+            transition: background-color .3s;
+            /* Transisi warna latar belakang saat dihover */
+            border: 1px solid #ddd;
+            /* Garis tepi link */
+            margin: 0 4px;
+            /* Jarak antara link pagination */
+        }
+
+        .pagination a.active {
+            background-color: #007bff;
+            /* Warna latar belakang untuk link aktif */
+            color: white;
+            /* Warna teks untuk link aktif */
+            border: 1px solid #007bff;
+            /* Garis tepi untuk link aktif */
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
         }
     </style>
 </head>
@@ -172,10 +223,10 @@ if (isset($_POST['search'])) {
                         </div>
 
                         <div class="card-body">
-                            <table id="datatablesSimple">
+                            <table id="datatablesSimple" class="table table-bordered text-center">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">No</th>
+                                        <th class=" text-center">No</th>
                                         <th class="text-center">Nama Coffe</th>
                                         <th class="text-center">Nama Pembeli</th>
                                         <th class="text-center">Status</th>
@@ -189,46 +240,41 @@ if (isset($_POST['search'])) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $no = 1;
-                                    $sql = "SELECT * FROM transaksi m, coffe s WHERE s.id_coffe = m.id_coffe";
-                                    if ($search_query != '') {
-                                        $sql .= " AND m.pembeli LIKE '%$search_query%'";
-                                    }
-                                    $ambildata = mysqli_query($koneksi, $sql);
-                                    while ($data = mysqli_fetch_array($ambildata)) {
-                                        $tanggal = $data['tanggal'];
-                                        $nama_coffe = $data['nama_coffe'];
-                                        $pembeli = $data['pembeli'];
-                                        $harga = $data['harga_coffe'];
-                                        $jumlah = $data['jumlah'];
-                                        $subtotal = $data['subtotal'];
-                                        $id_coffe = $data['id_coffe'];
-                                        $id_transaksi = $data['id_transaksi'];
-                                        $total = $data['total'];
-                                        $status = $data['status'];
+                                    $no = $start_from + 1;
+                                    while ($data = mysqli_fetch_array($result)) {
+                                        // Extract data here
                                     ?>
                                         <tr>
-                                            <td class="text-center"><?php echo $no; ?></td>
-                                            <td class="text-center"><?php echo $nama_coffe ?></td>
-                                            <td class="text-center"><?php echo $pembeli ?></td>
-                                            <td class="text-center"><?php echo $status ?></td>
-                                            <td class="text-center"><?php echo $harga; ?></td>
-                                            <td class="text-center"><?php echo $jumlah; ?></td>
-                                            <td class="text-center"><?php echo $tanggal; ?></td>
-                                            <td class="text-center"><?php echo $subtotal; ?></td>
-                                            <td class="text-center"><?php echo $total; ?></td>
-                                            <td class="text-center">
-                                                <a href="editdatatransaksi.php?data=<?php echo $id_transaksi; ?>" class="btn btn-xs btn-info"><i class="fas fa-edit"></i> Edit</a>
-                                                <a href="javascript:if(confirm('Anda yakin ingin menghapus data 
-                                                <?php echo $nama_coffe; ?>?'))window.location.href =  
-                                                'datatransaksi.php?aksi=hapus&data=<?php echo $id_transaksi; ?>&notif=hapusberhasil'" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> Hapus</a>
+                                            <td><?php echo $no; ?></td>
+                                            <td><?php echo $data['nama_coffe']; ?></td>
+                                            <td><?php echo $data['pembeli']; ?></td>
+                                            <td><?php echo $data['status']; ?></td>
+                                            <td><?php echo $data['harga_coffe']; ?></td>
+                                            <td><?php echo $data['jumlah']; ?></td>
+                                            <td><?php echo $data['tanggal']; ?></td>
+                                            <td><?php echo $data['subtotal']; ?></td>
+                                            <td><?php echo $data['total']; ?></td>
+                                            <td>
+                                                <a href="editdatatransaksi.php?data=<?php echo $data['id_transaksi']; ?>" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                                                <a href="datatransaksi.php?aksi=hapus&data=<?php echo $data['id_transaksi']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');"><i class="fas fa-trash"></i> Hapus</a>
                                             </td>
                                         </tr>
                                     <?php
                                         $no++;
-                                    } ?>
+                                    }
+                                    ?>
                                 </tbody>
+
                             </table>
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <?php
+                                    for ($i = 1; $i <= $total_pages; $i++) {
+                                        echo "<a href='datatransaksi.php?page=" . $i . "'>" . ' ' . $i . "</a> ";
+                                    }
+                                    ?>
+                                </ul>
+                            </nav>
                             <!-- Button trigger modal -->
                             <div class="card-tools">
                                 <a href="tambahdatatransaksi.php" class="btn btn-sm btn-primary float-right">
@@ -247,13 +293,6 @@ if (isset($_POST['search'])) {
             </footer>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="js/scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-    <script src="js/datatables-simple-demo.js"></script>
 </body>
 
 </html>
