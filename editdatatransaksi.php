@@ -42,6 +42,7 @@ if (isset($_GET['data'])) {
     <title>Dashboard - Stok Barang</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="css/styles.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     <style>
         .zoomable {
@@ -56,6 +57,16 @@ if (isset($_GET['data'])) {
         a {
             text-decoration: none;
             color: black;
+        }
+
+        #layoutSidenav_content {
+            background-color: #fff;
+            /* Set your desired background color */
+        }
+
+        body {
+            font-family: Montserrat, sans-serif;
+            /* Specify the font family you want to use */
         }
     </style>
 </head>
