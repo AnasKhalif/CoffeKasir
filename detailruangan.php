@@ -259,7 +259,6 @@ $totalmeja = 10 - $existing_tables;
     <script src="js/scripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
 
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

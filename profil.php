@@ -35,7 +35,6 @@ while ($data = mysqli_fetch_row($query)) {
     <meta name="author" content="" />
     <title>Data Profil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     <style>
@@ -205,56 +204,6 @@ while ($data = mysqli_fetch_row($query)) {
     <script src="js/scripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-
-    <script>
-        // Bar Chart Example
-        var ctx = document.getElementById("penjualan");
-        var myLineChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ["Oppo", "Iphone", "Redmi", "April", "May", "June"],
-                datasets: [{
-                    label: "Revenue",
-                    backgroundColor: "rgba(2,117,216,1)",
-                    borderColor: "rgba(2,117,216,1)",
-                    data: [4215, 5312, 6251, 7841, 9821, 14984],
-                }],
-            },
-            options: {
-                scales: {
-                    xAxes: [{
-                        time: {
-                            unit: 'month'
-                        },
-                        gridLines: {
-                            display: false
-                        },
-                        ticks: {
-                            maxTicksLimit: 6
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            min: 0,
-                            max: 15000,
-                            maxTicksLimit: 5
-                        },
-                        gridLines: {
-                            display: true
-                        }
-                    }],
-                },
-                legend: {
-                    display: false
-                }
-            }
-        });
-    </script>
-
-    <!-- Datatables -->
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-    <script src="js/datatables-simple-demo.js"></script>
 
 </body>
 
