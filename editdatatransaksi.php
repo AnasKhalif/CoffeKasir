@@ -60,12 +60,12 @@ if (isset($_GET['data'])) {
         }
 
         #layoutSidenav_content {
-            background-color: #fff;
+            background-color: red;
             /* Set your desired background color */
         }
 
         body {
-            font-family: Montserrat, sans-serif;
+            /* font-family: Montserrat, sans-serif; */
             /* Specify the font family you want to use */
         }
     </style>

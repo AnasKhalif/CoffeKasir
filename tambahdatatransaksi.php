@@ -130,7 +130,7 @@ $role = $_SESSION['level'] === 'admin';
             <main>
                 <div class="container-fluid px-4">
                     <div class="col-sm-6">
-                        <h3><i class="fas fa-plus mt-3"></i> Tambah Data Transaksi</h3>
+                        <h3><i class="fas fa-plus mt-3"></i> <em>Tambah Data Transaksi</em></h3>
                     </div>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item active">Halaman Tambah Data Transaksi</li>
