@@ -6,7 +6,7 @@
   height="500"/>
 </div>
 
-## About The Project
+# About The Project
 
 Coffee Kasir adalah aplikasi kasir yang dirancang khusus untuk kedai kopi. Aplikasi ini memudahkan pengelolaan transaksi, inventaris, serta reservasi pelanggan. Dengan antarmuka yang ramah pengguna, Coffee Kasir membantu meningkatkan efisiensi operasional dan memberikan pengalaman pelanggan yang lebih baik.
 
