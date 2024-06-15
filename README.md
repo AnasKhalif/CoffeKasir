@@ -2,7 +2,7 @@
 
 <!-- THUMBNAIL -->
 <div align="center">
-<img src="" alt="CoffeKasir-thumbnail" 
+<img src="https://github.com/AnasKhalif/CoffeKasir/blob/master/Assets/thumbnail.png" alt="CoffeKasir-thumbnail" 
   height="500"/>
 </div>
 
